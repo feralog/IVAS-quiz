@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — IVAS em Pediatria</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #1a1a1a; min-height: 100vh; }
+  header { background: #1e3a5f; color: white; padding: 20px 30px; text-align: center; }
+  header h1 { font-size: 22px; margin-bottom: 4px; }
+  header p { font-size: 13px; opacity: 0.8; }
+  .quiz-container { max-width: 800px; margin: 30px auto; padding: 0 16px 60px; }
+  #startScreen { background: white; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  #startScreen h2 { font-size: 20px; color: #1e3a5f; margin-bottom: 12px; }
+  #startScreen p { font-size: 14px; color: #555; margin-bottom: 24px; line-height: 1.6; }
+  .progress-bar-bg { background: #dde3ea; border-radius: 8px; height: 8px; margin-bottom: 8px; }
+  .progress-bar-fill { background: #2563eb; height: 8px; border-radius: 8px; transition: width 0.4s ease; }
+  .progress-label { font-size: 12px; color: #666; margin-bottom: 20px; }
+  .question-card { background: white; border-radius: 12px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); margin-bottom: 16px; }
+  .question-number { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #2563eb; letter-spacing: 1px; margin-bottom: 10px; }
+  .question-text { font-size: 15px; line-height: 1.65; color: #1a1a1a; margin-bottom: 22px; }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option-btn { background: #f7f9fc; border: 2px solid #dde3ea; border-radius: 8px; padding: 12px 16px; text-align: left; font-size: 14px; cursor: pointer; transition: background 0.15s, border-color 0.15s; line-height: 1.5; }
+  .option-btn:hover:not(:disabled) { background: #e8f0fe; border-color: #2563eb; }
+  .option-btn.correct { background: #d1fae5; border-color: #16a34a; color: #166534; }
+  .option-btn.wrong { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+  .option-btn:disabled { cursor: default; }
+  .explanation { display: none; background: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 0 8px 8px 0; padding: 14px 16px; margin-top: 14px; font-size: 13px; line-height: 1.6; color: #166534; }
+  .explanation.show { display: block; }
+  .btn-next { display: none; margin-top: 18px; background: #2563eb; color: white; border: none; border-radius: 8px; padding: 12px 28px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+  .btn-next:hover { background: #1d4ed8; }
+  .btn-next.show { display: inline-block; }
+  .btn-primary { background: #2563eb; color: white; border: none; border-radius: 8px; padding: 14px 36px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+  .btn-primary:hover { background: #1d4ed8; }
+  #resultScreen { display: none; background: white; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .score-circle { width: 120px; height: 120px; border-radius: 50%; background: #1e3a5f; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 20px; }
+  .score-circle .score-num { font-size: 32px; font-weight: 700; }
+  .score-circle .score-denom { font-size: 13px; opacity: 0.8; }
+  #resultScreen h2 { font-size: 20px; color: #1e3a5f; margin-bottom: 10px; }
+  #resultScreen p { font-size: 14px; color: #555; margin-bottom: 24px; }
+  .stats-row { display: flex; justify-content: center; gap: 24px; margin-bottom: 28px; flex-wrap: wrap; }
+  .stat-box { background: #f7f9fc; border-radius: 8px; padding: 12px 20px; text-align: center; min-width: 90px; }
+  .stat-box .stat-val { font-size: 22px; font-weight: 700; }
+  .stat-box .stat-lbl { font-size: 11px; color: #888; margin-top: 2px; }
+  .stat-box.green .stat-val { color: #16a34a; }
+  .stat-box.red .stat-val { color: #dc2626; }
+  .stat-box.blue .stat-val { color: #2563eb; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Infecções de Vias Aéreas Superiores (IVAS)</h1>
+  <p>Pediatria — Infectologia Pediátrica</p>
+</header>
+<div class="quiz-container">
+  <div id="startScreen">
+    <h2>Quiz de Revisão</h2>
+    <p>20 questões cobrindo resfriado comum, RSA bacteriana, OMA, faringoamigdalite, crupe, epiglotite, bronquiolite viral e tuberculose pediátrica.<br><br>Responda cada questão e veja a explicação antes de avançar.</p>
+    <button class="btn-primary" onclick="startQuiz()">Começar Quiz</button>
+  </div>
+  <div id="quizArea" style="display:none;">
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">Questão 0 de 20</div>
+    <div class="question-card" id="questionCard">
+      <div class="question-number" id="questionNumber"></div>
+      <div class="question-text" id="questionText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="explanation" id="explanation"></div>
+      <button class="btn-next" id="btnNext" onclick="nextQuestion()">Próxima questão →</button>
+    </div>
+  </div>
+  <div id="resultScreen">
+    <div class="score-circle">
+      <span class="score-num" id="scoreFinal">0</span>
+      <span class="score-denom" id="scoreDenom">de 20</span>
+    </div>
+    <h2 id="resultTitle"></h2>
+    <p id="resultMsg"></p>
+    <div class="stats-row">
+      <div class="stat-box green"><div class="stat-val" id="statCorrect">0</div><div class="stat-lbl">Acertos</div></div>
+      <div class="stat-box red"><div class="stat-val" id="statWrong">0</div><div class="stat-lbl">Erros</div></div>
+      <div class="stat-box blue"><div class="stat-val" id="statPct">0%</div><div class="stat-lbl">Aproveitamento</div></div>
+    </div>
+    <button class="btn-primary" onclick="restartQuiz()">Refazer Quiz</button>
+  </div>
+</div>
+<script>
+const rawQuestions = [
+  {
+    question: "Uma criança de 4 anos apresenta coriza, congestão nasal, tosse e febre baixa há 2 dias, sem melhora dos sintomas. Qual a conduta mais adequada?",
+    options: [
+      "Tratamento sintomático; não indicar antibiótico, AAS nem mucolíticos",
+      "Prescrever amoxicilina por 7 dias para prevenir otite média aguda",
+      "Solicitar hemograma e PCR para definir se há componente bacteriano",
+      "Prescrever AAS para controle da febre e sintomas inflamatórios",
+      "Indicar mucolítico para facilitar a drenagem das secreções"
+    ],
+    correctIndex: 0,
+    explanation: "Resfriado comum: viral, autolimitado (7–10 dias, até 11 episódios/ano em crianças). Tratamento é SINTOMÁTICO (analgésicos/antitérmicos se necessário). AAS é contraindicado (risco de síndrome de Reye). Mucolíticos não têm eficácia comprovada. Antibiótico não indicado em infecção viral."
+  },
+  {
+    question: "Qual o critério clínico-temporal que diferencia a RSA bacteriana do resfriado comum complicado?",
+    options: [
+      "Sintomas persistindo >10 dias sem melhora OU piora após melhora inicial (double sickening) OU sintomas graves desde o início",
+      "Febre acima de 39°C por mais de 3 dias com secreção purulenta",
+      "Presença de secreção nasal purulenta com duração superior a 5 dias",
+      "Dor facial localizada associada a cefaleia por mais de 2 dias",
+      "Tosse noturna associada a obstrução nasal por mais de 7 dias"
+    ],
+    correctIndex: 0,
+    explanation: "RSA bacteriana: sintomas >10 dias sem melhora; OR piora após melhora inicial (double sickening); OR sintomas graves desde o início (febre >39°C + secreção purulenta por ≥3 dias). Radiografia de seios NÃO é recomendada de rotina. Tratamento: amoxicilina 45–90 mg/kg/dia."
+  },
+  {
+    question: "Qual o tratamento de primeira linha para OMA (otite média aguda) em criança de 18 meses?",
+    options: [
+      "Amoxicilina 50 mg/kg/dia por 10 dias",
+      "Amoxicilina-clavulanato por 5 dias",
+      "Azitromicina por 3 dias",
+      "Ceftriaxona intramuscular dose única",
+      "Watchful waiting sem antibiótico nas primeiras 72 horas"
+    ],
+    correctIndex: 0,
+    explanation: "OMA em <2 anos: amoxicilina 50 mg/kg/dia por 10 dias (duração maior que em crianças maiores). Em >2 anos com OMA leve: pode-se observar 48–72h (watchful waiting). Se falha em 48–72h ou perfuração: amoxicilina-clavulanato. Ceftriaxona IM para vômitos ou falha oral."
+  },
+  {
+    question: "Qual escore é utilizado para diferenciar faringoamigdalite bacteriana (estreptocócica) de viral na criança?",
+    options: [
+      "Escore de McIsaac (ou de Centor modificado)",
+      "Escore de Wells",
+      "Escore CURB-65",
+      "Escore de Bishop",
+      "Escore de Alvarado"
+    ],
+    correctIndex: 0,
+    explanation: "Escore de McIsaac: exsudato amigdaliano (+1), adenomegalia cervical anterior dolorosa (+1), ausência de tosse (+1), febre >38°C (+1), idade <15 anos (+1). ≥3 pontos: indicado teste rápido para SBHGA ou cultura. Tratamento com penicilina se bacteriana confirmada/provável."
+  },
+  {
+    question: "Qual o tratamento de escolha para faringoamigdalite estreptocócica confirmada?",
+    options: [
+      "Penicilina benzatina IM dose única OU amoxicilina oral por 10 dias",
+      "Azitromicina por 5 dias como primeira linha",
+      "Cefalexina por 7 dias para cobrir S. aureus concomitante",
+      "Ceftriaxona EV por 3 dias seguida de amoxicilina oral",
+      "Watchful waiting por 5 dias antes de iniciar antibiótico"
+    ],
+    correctIndex: 0,
+    explanation: "Faringoamigdalite por SBHGA: penicilina benzatina IM (dose única) ou amoxicilina oral por 10 dias. Objetivo: erradicar SBHGA e prevenir febre reumática. Azitromicina é reservada para alergia à penicilina (resistência crescente). NÃO tratar faringoamigdalite viral com antibiótico."
+  },
+  {
+    question: "Criança de 2 anos com febre, rouquidão, tosse em 'crupe' (ladrante/metálica) e estridor inspiratório. Qual o diagnóstico e o tratamento?",
+    options: [
+      "Laringotraqueobronquite viral (crupe viral) — dexametasona oral + nebulização com adrenalina se grave",
+      "Epiglotite por H. influenzae — internação urgente e intubação cirúrgica",
+      "Corpo estranho em laringe — laringoscopia de urgência e remoção",
+      "Laringite espasmódica — alta domiciliar sem tratamento, resolução espontânea",
+      "Abscesso retrofaríngeo — TC de pescoço e drenagem cirúrgica"
+    ],
+    correctIndex: 0,
+    explanation: "Crupe viral (laringotraqueobronquite): pico entre 6 meses–3 anos, HHV-6/7 ou parainfluenza, tosse ladrante, rouquidão, estridor inspiratório, febre baixa. Tratamento: dexametasona 0,6 mg/kg VO/IM + nebulização com adrenalina racêmica ou L-adrenalina se estridor em repouso. Casos leves: apenas dexametasona."
+  },
+  {
+    question: "O que diferencia clinicamente a epiglotite da laringotraqueobronquite viral (crupe)?",
+    options: [
+      "Epiglotite: febre alta, disfagia, sialorreia, posição de tripé (sem tosse ladrante); crupe: tosse ladrante, rouquidão, febre baixa/moderada",
+      "Crupe: disfagia e sialorreia intensas; epiglotite: tosse metálica com rouquidão",
+      "Epiglotite ocorre em <1 ano; crupe afeta principalmente escolares de 6–12 anos",
+      "Crupe tem obstrução inspiratória e expiratória; epiglotite tem apenas obstrução expiratória",
+      "Não há diferença clínica; ambos são tratados com dexametasona e adrenalina"
+    ],
+    correctIndex: 0,
+    explanation: "Epiglotite (H. influenzae B, agora rara): febre alta, disfagia, sialorreia, posição de tripé (inclina para frente), ansiedade, sem tosse ladrante. Via aérea em risco → intubação em centro cirúrgico com laringoscopia sob anestesia. NUNCA examinar a garganta sem controle da via aérea. Crupe: tosse ladrante, rouquidão, estridor, febre baixa."
+  },
+  {
+    question: "Qual o tratamento da epiglotite bacteriana aguda?",
+    options: [
+      "Internação em UTI, intubação orotraqueal em ambiente cirúrgico controlado e ceftriaxona endovenosa",
+      "Dexametasona intramuscular e adrenalina nebulizada em pronto-socorro",
+      "Alta domiciliar com amoxicilina-clavulanato oral por 10 dias",
+      "Traqueostomia de emergência sem anestesia no pronto-socorro",
+      "Corticoterapia oral e observação por 6 horas no pronto-socorro"
+    ],
+    correctIndex: 0,
+    explanation: "Epiglotite: emergência respiratória. Conduta: não examinar a garganta sem controle da via aérea; intubação orotraqueal em centro cirúrgico (anestesista + cirurgião à postos para traqueostomia); ceftriaxona EV. Nunca tentar visualizar a epiglote em consultório sem estrutura de emergência."
+  },
+  {
+    question: "Qual o agente e a faixa etária clássicos da bronquiolite viral aguda?",
+    options: [
+      "VSR (Vírus Sincicial Respiratório) em lactentes menores de 24 meses",
+      "Parainfluenza em escolares de 5 a 10 anos",
+      "Adenovírus em recém-nascidos menores de 1 mês",
+      "Influenza A em adolescentes imunossuprimidos",
+      "Rhinovírus em crianças de 2 a 5 anos com atopia"
+    ],
+    correctIndex: 0,
+    explanation: "Bronquiolite viral: VSR é o principal agente (>50% dos casos), afeta lactentes <24 meses, pico no outono/inverno. Diagnóstico é clínico (primeiro episódio de sibilância com infecção respiratória viral). Não solicitar Rx de rotina. Tratamento: suporte (O₂, hidratação, decúbito elevado). Broncodilatadores têm eficácia limitada."
+  },
+  {
+    question: "Por que não se deve solicitar radiografia de tórax de rotina na bronquiolite viral aguda?",
+    options: [
+      "O Rx frequentemente mostra hiperinsuflação e atelectasias que podem ser confundidos com consolidação, levando a antibioticoterapia desnecessária",
+      "O Rx é normal em 100% dos casos de bronquiolite, sendo desnecessário",
+      "O Rx tem custo elevado e irradiação excessiva sem qualquer utilidade diagnóstica",
+      "O Rx só deve ser pedido após o 7º dia de doença para evitar falso-negativo",
+      "Não há nenhuma contraindicação ao Rx; ele é opcional mas recomendado"
+    ],
+    correctIndex: 0,
+    explanation: "Na bronquiolite, o Rx frequentemente mostra hiperinsuflação e atelectasias subsegmentares que podem ser erroneamente interpretadas como consolidação bacteriana → antibioticoterapia desnecessária. Solicitar Rx apenas se houver dúvida diagnóstica, suspeita de complicação ou não melhora após 72h."
+  },
+  {
+    question: "Qual é o critério de positividade do PPD (teste tuberculínico) em uma criança de 3 anos sem fatores de risco para tuberculose?",
+    options: [
+      "≥10 mm de enduração (em imunocompetentes sem contato com TB)",
+      "≥5 mm de enduração em qualquer criança",
+      "≥15 mm de enduração para ser considerado positivo",
+      "Qualquer enduração >0 mm em imunocompetentes",
+      "≥10 mm apenas se a criança não foi vacinada com BCG"
+    ],
+    correctIndex: 0,
+    explanation: "PPD positivo: ≥5 mm em imunossuprimidos, HIV, contatos recentes de TB ou Rx suspeito; ≥10 mm em imunocompetentes sem contato (crianças normais); ≥15 mm em vacinados com BCG há <2 anos (para diferenciar de reação vacinal). Vacinação com BCG pode causar falso-positivo de 5–9 mm."
+  },
+  {
+    question: "Qual o critério diagnóstico de TB pediátrica quando a baciloscopia e cultura são negativas?",
+    options: [
+      "Sistema de pontuação do MS brasileiro (escore de Stegen modificado): história de contato + quadro clínico + PPD + Rx de tórax + estado nutricional",
+      "Apenas o PPD positivo é suficiente para iniciar tratamento",
+      "Diagnóstico exclusivo por cultura do lavado gástrico ou broncoscopia",
+      "PCR para Mycobacterium tuberculosis negativa exclui o diagnóstico",
+      "Apenas por biópsia de linfonodo com granuloma caseoso confirmado"
+    ],
+    correctIndex: 0,
+    explanation: "TB pediátrica: frequentemente paucibacilar, com baciloscopia negativa. O diagnóstico usa o sistema de pontuação (Escore de Stegen modificado do MS): contato com bacilífero, clínica (febre prolongada, tosse, perda de peso), PPD positivo, Rx sugestivo e estado nutricional. ≥30 pontos = tratamento; 20–25 = investigar."
+  },
+  {
+    question: "Qual a profilaxia indicada para uma criança <5 anos assintomática que teve contato com adulto bacilífero?",
+    options: [
+      "Isoniazida (INH) por 6 meses (quimioprofilaxia primária), independentemente do PPD",
+      "Rifampicina por 4 meses se PPD positivo",
+      "BCG se não vacinada, sem necessidade de isoniazida",
+      "Apenas vigilância clínica e repetição do PPD em 8 semanas",
+      "Isoniazida por 9 meses somente se PPD ≥10 mm"
+    ],
+    correctIndex: 0,
+    explanation: "Quimioprofilaxia primária para TB: contato com bacilífero + <5 anos OU imunocomprometido → isoniazida por 6 meses (independentemente do PPD, pois a imunidade é imatura em <5 anos). Reavaliação com PPD após 2–3 meses; se positivo: completar profilaxia e excluir doença ativa."
+  },
+  {
+    question: "Uma criança apresenta estridor inspiratório, dispneia, ansiedade, sialorreia intensa e posição de tripé. Qual a conduta INCORRETA neste cenário?",
+    options: [
+      "Examinar a orofaringe com abaixador de língua para visualizar a epiglote e confirmar o diagnóstico",
+      "Manter a criança em posição confortável e não a agitar",
+      "Preparar equipe para intubação/traqueostomia em centro cirúrgico",
+      "Iniciar ceftriaxona EV após segurança da via aérea",
+      "Solicitar laringoscopia sob anestesia em ambiente cirúrgico"
+    ],
+    correctIndex: 0,
+    explanation: "Examinar a orofaringe com abaixador de língua na epiglotite é CONTRAINDICADO: pode desencadear laringoespasmo e obstrução total da via aérea, levando à parada cardiorrespiratória. A criança deve ser mantida em posição confortável (geralmente sentada), sem manipulação, e conduzida ao centro cirúrgico para intubação segura."
+  },
+  {
+    question: "Criança de 9 meses com estridor inspiratório leve, tosse ladrante, rouquidão e febre de 38°C. Sem estridor em repouso. Qual o tratamento?",
+    options: [
+      "Dexametasona oral 0,15–0,6 mg/kg dose única e observação domiciliar",
+      "Internação para adrenalina nebulizada a cada 2 horas",
+      "Amoxicilina oral por 7 dias para cobrir infecção bacteriana secundária",
+      "Ceftriaxona intramuscular dose única e alta domiciliar",
+      "Apenas umidificação do ar e watchful waiting sem medicação"
+    ],
+    correctIndex: 0,
+    explanation: "Crupe leve (estridor apenas ao choro/agitação, sem estridor em repouso): dexametasona oral 0,15–0,6 mg/kg dose única. Reduz internações e retornos. Adrenalina nebulizada é reservada para crupe moderado/grave (estridor em repouso, retração, hipoxemia). Alta após 4h de observação se melhora."
+  },
+  {
+    question: "Qual o número médio de episódios de resfriado comum que uma criança pode apresentar por ano?",
+    options: [
+      "Até 11 episódios por ano (média 6–8), sendo mais frequentes em creches",
+      "No máximo 3 episódios por ano em crianças saudáveis",
+      "Até 5 episódios por ano, sempre com causa bacteriana",
+      "Mais de 15 episódios por ano é considerado normal em lactentes",
+      "Apenas 1–2 episódios por ano em crianças vacinadas corretamente"
+    ],
+    correctIndex: 0,
+    explanation: "Crianças podem ter até 11 episódios de resfriado por ano (média 6–8), especialmente as que frequentam creches. É o motivo mais comum de consulta pediátrica. Causa viral (rinovírus > outros), autolimitado (7–10 dias). Não indica antibiótico."
+  },
+  {
+    question: "Qual das seguintes afirmações sobre bronquiolite viral é VERDADEIRA?",
+    options: [
+      "O diagnóstico é clínico (primeiro episódio de sibilância com quadro viral em <24 meses) e não requer exames complementares rotineiros",
+      "A fisioterapia respiratória convencional é altamente recomendada como tratamento de primeira linha",
+      "Salbutamol nebulizado deve ser prescrito em todos os casos para abrir as vias aéreas",
+      "Corticosteroides sistêmicos são obrigatórios nos casos moderados a graves",
+      "Antibiótico está sempre indicado para prevenir sobreinfecção bacteriana"
+    ],
+    correctIndex: 0,
+    explanation: "Bronquiolite: diagnóstico clínico (primeiro episódio de sibilância + infecção respiratória viral em <24 meses). NÃO realizar Rx rotineiramente, NÃO usar broncodilatadores de rotina (eficácia não comprovada), NÃO usar corticosteroides, NÃO usar antibióticos profilaticamente. Tratamento: suporte (O₂, hidratação, aspiração de vias aéreas)."
+  },
+  {
+    question: "Qual o agente causador mais frequente da otite média aguda (OMA) bacteriana em crianças?",
+    options: [
+      "Streptococcus pneumoniae",
+      "Haemophilus influenzae não tipável",
+      "Moraxella catarrhalis",
+      "Staphylococcus aureus",
+      "Streptococcus pyogenes"
+    ],
+    correctIndex: 0,
+    explanation: "OMA bacteriana: S. pneumoniae é o mais frequente (40%), seguido de H. influenzae não tipável (25%) e Moraxella catarrhalis (12%). A vacina pneumocócica conjugada mudou a epidemiologia. H. influenzae e Moraxella produzem beta-lactamase → amoxicilina-clavulanato se falha com amoxicilina."
+  },
+  {
+    question: "Quais são as indicações de adenotonsilectomia na amigdalite de repetição?",
+    options: [
+      "≥7 episódios/ano por 1 ano, OU ≥5 episódios/ano por 2 anos, OU ≥3 episódios/ano por 3 anos (critérios de Paradise)",
+      "Qualquer criança com mais de 3 episódios de amigdalite no último ano",
+      "Amigdalite em crianças maiores de 5 anos com escore de McIsaac ≥3",
+      "Ausência de resposta ao antibiótico por 5 dias em qualquer episódio",
+      "Amigdalite com abscesso periamigdaliano em qualquer faixa etária"
+    ],
+    correctIndex: 0,
+    explanation: "Critérios de Paradise para adenotonsilectomia: ≥7 episódios documentados/ano por 1 ano; ≥5/ano por 2 anos consecutivos; ≥3/ano por 3 anos consecutivos. Cada episódio deve ter ≥1: temperatura >38,3°C, exsudato amigdaliano, adenomegalia cervical ou cultura/teste rápido positivo para SBHGA."
+  },
+  {
+    question: "Lactente de 5 meses com coriza há 3 dias, febre de 38,5°C e otalgia. Ao exame: membrana timpânica hiperemiada, abaulada, com perda do cone de luz. Qual a conduta?",
+    options: [
+      "Amoxicilina 50 mg/kg/dia por 10 dias (OMA em <2 anos sempre trata com antibiótico)",
+      "Watchful waiting por 48–72h sem antibiótico, pois pode resolver espontaneamente",
+      "Azitromicina por 3 dias como alternativa ao amoxicilina",
+      "Ceftriaxona IM em dose única para garantir adesão ao tratamento",
+      "Apenas analgesia com paracetamol e reavaliação em 72 horas"
+    ],
+    correctIndex: 0,
+    explanation: "OMA em <2 anos: SEMPRE tratar com antibiótico (amoxicilina 50 mg/kg/dia, 10 dias). Watchful waiting é aceitável apenas em >2 anos com OMA leve unilateral. Membrana abaulada + hiperemia + perda do cone de luz = OMA definida, independentemente da faixa etária."
+  }
+];
+
+function shuffleQuestion(q) {
+  const correctText = q.options[q.correctIndex];
+  const shuffled = [...q.options];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return { ...q, options: shuffled, correctIndex: shuffled.indexOf(correctText) };
+}
+function prepareQuestions() {
+  const shuffledQs = [...rawQuestions];
+  for (let i = shuffledQs.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledQs[i], shuffledQs[j]] = [shuffledQs[j], shuffledQs[i]];
+  }
+  return shuffledQs.map(shuffleQuestion);
+}
+let questions = [], currentIndex = 0, score = 0, answered = 0;
+function startQuiz() {
+  questions = prepareQuestions(); currentIndex = 0; score = 0; answered = 0;
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'none';
+  document.getElementById('quizArea').style.display = 'block';
+  renderQuestion();
+}
+function renderQuestion() {
+  const q = questions[currentIndex]; const total = questions.length;
+  document.getElementById('progressBar').style.width = ((currentIndex / total) * 100) + '%';
+  document.getElementById('progressLabel').textContent = `Questão ${currentIndex + 1} de ${total}`;
+  document.getElementById('questionNumber').textContent = `Questão ${currentIndex + 1}`;
+  document.getElementById('questionText').textContent = q.question;
+  const container = document.getElementById('optionsContainer'); container.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button'); btn.className = 'option-btn'; btn.textContent = opt;
+    btn.onclick = () => selectAnswer(i); container.appendChild(btn);
+  });
+  document.getElementById('explanation').classList.remove('show');
+  document.getElementById('explanation').textContent = '';
+  document.getElementById('btnNext').classList.remove('show');
+}
+function selectAnswer(selectedIndex) {
+  const q = questions[currentIndex]; const buttons = document.querySelectorAll('.option-btn');
+  buttons.forEach(btn => btn.disabled = true);
+  if (selectedIndex === q.correctIndex) { buttons[selectedIndex].classList.add('correct'); score++; }
+  else { buttons[selectedIndex].classList.add('wrong'); buttons[q.correctIndex].classList.add('correct'); }
+  answered++;
+  const exp = document.getElementById('explanation'); exp.textContent = q.explanation; exp.classList.add('show');
+  const btnNext = document.getElementById('btnNext');
+  btnNext.textContent = currentIndex < questions.length - 1 ? 'Próxima questão →' : 'Ver resultado';
+  btnNext.classList.add('show');
+}
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex < questions.length) { renderQuestion(); } else { showResult(); }
+}
+function showResult() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'block';
+  const total = questions.length; const pct = Math.round((score / total) * 100);
+  document.getElementById('scoreFinal').textContent = score;
+  document.getElementById('scoreDenom').textContent = `de ${total}`;
+  document.getElementById('statCorrect').textContent = score;
+  document.getElementById('statWrong').textContent = total - score;
+  document.getElementById('statPct').textContent = pct + '%';
+  let title, msg;
+  if (pct >= 90) { title = 'Excelente!'; msg = 'Domínio completo do conteúdo. Você está preparado para a prova.'; }
+  else if (pct >= 70) { title = 'Muito bom!'; msg = 'Bom domínio geral. Revise os pontos onde errou antes da prova.'; }
+  else if (pct >= 50) { title = 'Razoável'; msg = 'Ainda há pontos a consolidar. Releia o relatório e refaça o quiz.'; }
+  else { title = 'Precisa revisar'; msg = 'Recomendo reler o relatório completo antes de tentar novamente.'; }
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultMsg').textContent = msg;
+}
+function restartQuiz() { startQuiz(); }
+</script>
+</body>
+</html>
