@@ -102,11 +102,11 @@ const rawQuestions = [
   {
     question: "Qual o critério clínico-temporal que diferencia a RSA bacteriana do resfriado comum complicado?",
     options: [
-      "Sintomas persistindo >10 dias sem melhora OU piora após melhora inicial (double sickening) OU sintomas graves desde o início",
-      "Febre acima de 39°C por mais de 3 dias com secreção purulenta",
+      "Sintomas >10 dias sem melhora, double sickening ou sintomas graves desde o início",
+      "Febre acima de 39°C por mais de 3 dias com secreção purulenta nasal",
       "Presença de secreção nasal purulenta com duração superior a 5 dias",
-      "Dor facial localizada associada a cefaleia por mais de 2 dias",
-      "Tosse noturna associada a obstrução nasal por mais de 7 dias"
+      "Dor facial localizada com cefaleia persistente por mais de 2 dias",
+      "Tosse noturna persistente com obstrução nasal intensa por mais de 7 dias"
     ],
     correctIndex: 0,
     explanation: "RSA bacteriana: sintomas >10 dias sem melhora; OR piora após melhora inicial (double sickening); OR sintomas graves desde o início (febre >39°C + secreção purulenta por ≥3 dias). Radiografia de seios NÃO é recomendada de rotina. Tratamento: amoxicilina 45–90 mg/kg/dia."
@@ -115,10 +115,10 @@ const rawQuestions = [
     question: "Qual o tratamento de primeira linha para OMA (otite média aguda) em criança de 18 meses?",
     options: [
       "Amoxicilina 50 mg/kg/dia por 10 dias",
-      "Amoxicilina-clavulanato por 5 dias",
-      "Azitromicina por 3 dias",
-      "Ceftriaxona intramuscular dose única",
-      "Watchful waiting sem antibiótico nas primeiras 72 horas"
+      "Amoxicilina-clavulanato oral por 5 dias",
+      "Azitromicina 10 mg/kg/dia por 3 dias",
+      "Ceftriaxona 50 mg/kg/dia IM dose única",
+      "Watchful waiting sem antibiótico por 72h"
     ],
     correctIndex: 0,
     explanation: "OMA em <2 anos: amoxicilina 50 mg/kg/dia por 10 dias (duração maior que em crianças maiores). Em >2 anos com OMA leve: pode-se observar 48–72h (watchful waiting). Se falha em 48–72h ou perfuração: amoxicilina-clavulanato. Ceftriaxona IM para vômitos ou falha oral."
@@ -126,11 +126,11 @@ const rawQuestions = [
   {
     question: "Qual escore é utilizado para diferenciar faringoamigdalite bacteriana (estreptocócica) de viral na criança?",
     options: [
-      "Escore de McIsaac (ou de Centor modificado)",
-      "Escore de Wells",
-      "Escore CURB-65",
-      "Escore de Bishop",
-      "Escore de Alvarado"
+      "Escore de McIsaac — faringoamigdalite bacteriana",
+      "Escore de Wells — tromboembolismo pulmonar ou TVP",
+      "Escore CURB-65 — gravidade da pneumonia adquirida",
+      "Escore de Bishop — condições do colo uterino",
+      "Escore de Alvarado — probabilidade de apendicite"
     ],
     correctIndex: 0,
     explanation: "Escore de McIsaac: exsudato amigdaliano (+1), adenomegalia cervical anterior dolorosa (+1), ausência de tosse (+1), febre >38°C (+1), idade <15 anos (+1). ≥3 pontos: indicado teste rápido para SBHGA ou cultura. Tratamento com penicilina se bacteriana confirmada/provável."
@@ -139,7 +139,7 @@ const rawQuestions = [
     question: "Qual o tratamento de escolha para faringoamigdalite estreptocócica confirmada?",
     options: [
       "Penicilina benzatina IM dose única OU amoxicilina oral por 10 dias",
-      "Azitromicina por 5 dias como primeira linha",
+      "Azitromicina 10 mg/kg/dia por 5 dias como primeira linha",
       "Cefalexina por 7 dias para cobrir S. aureus concomitante",
       "Ceftriaxona EV por 3 dias seguida de amoxicilina oral",
       "Watchful waiting por 5 dias antes de iniciar antibiótico"
@@ -150,11 +150,11 @@ const rawQuestions = [
   {
     question: "Criança de 2 anos com febre, rouquidão, tosse em 'crupe' (ladrante/metálica) e estridor inspiratório. Qual o diagnóstico e o tratamento?",
     options: [
-      "Laringotraqueobronquite viral (crupe viral) — dexametasona oral + nebulização com adrenalina se grave",
+      "Crupe viral (laringotraqueobronquite) — dexametasona oral e adrenalina se grave",
       "Epiglotite por H. influenzae — internação urgente e intubação cirúrgica",
       "Corpo estranho em laringe — laringoscopia de urgência e remoção",
       "Laringite espasmódica — alta domiciliar sem tratamento, resolução espontânea",
-      "Abscesso retrofaríngeo — TC de pescoço e drenagem cirúrgica"
+      "Abscesso retrofaríngeo — TC de pescoço, drenagem cirúrgica e antibiótico EV"
     ],
     correctIndex: 0,
     explanation: "Crupe viral (laringotraqueobronquite): pico entre 6 meses–3 anos, HHV-6/7 ou parainfluenza, tosse ladrante, rouquidão, estridor inspiratório, febre baixa. Tratamento: dexametasona 0,6 mg/kg VO/IM + nebulização com adrenalina racêmica ou L-adrenalina se estridor em repouso. Casos leves: apenas dexametasona."
@@ -162,7 +162,7 @@ const rawQuestions = [
   {
     question: "O que diferencia clinicamente a epiglotite da laringotraqueobronquite viral (crupe)?",
     options: [
-      "Epiglotite: febre alta, disfagia, sialorreia, posição de tripé (sem tosse ladrante); crupe: tosse ladrante, rouquidão, febre baixa/moderada",
+      "Epiglotite: febre alta, disfagia, sialorreia e posição de tripé; crupe: tosse ladrante e rouquidão",
       "Crupe: disfagia e sialorreia intensas; epiglotite: tosse metálica com rouquidão",
       "Epiglotite ocorre em <1 ano; crupe afeta principalmente escolares de 6–12 anos",
       "Crupe tem obstrução inspiratória e expiratória; epiglotite tem apenas obstrução expiratória",
@@ -174,7 +174,7 @@ const rawQuestions = [
   {
     question: "Qual o tratamento da epiglotite bacteriana aguda?",
     options: [
-      "Internação em UTI, intubação orotraqueal em ambiente cirúrgico controlado e ceftriaxona endovenosa",
+      "Internação em UTI, intubação em ambiente cirúrgico controlado e ceftriaxona EV",
       "Dexametasona intramuscular e adrenalina nebulizada em pronto-socorro",
       "Alta domiciliar com amoxicilina-clavulanato oral por 10 dias",
       "Traqueostomia de emergência sem anestesia no pronto-socorro",
@@ -186,11 +186,11 @@ const rawQuestions = [
   {
     question: "Qual o agente e a faixa etária clássicos da bronquiolite viral aguda?",
     options: [
-      "VSR (Vírus Sincicial Respiratório) em lactentes menores de 24 meses",
-      "Parainfluenza em escolares de 5 a 10 anos",
-      "Adenovírus em recém-nascidos menores de 1 mês",
-      "Influenza A em adolescentes imunossuprimidos",
-      "Rhinovírus em crianças de 2 a 5 anos com atopia"
+      "VSR em lactentes menores de 24 meses como principal agente viral",
+      "Parainfluenza em escolares de 5 a 10 anos como principal vírus",
+      "Adenovírus em recém-nascidos menores de 1 mês como principal agente",
+      "Influenza A em adolescentes imunossuprimidos como agente dominante",
+      "Rhinovírus em crianças de 2 a 5 anos com atopia como causa exclusiva"
     ],
     correctIndex: 0,
     explanation: "Bronquiolite viral: VSR é o principal agente (>50% dos casos), afeta lactentes <24 meses, pico no outono/inverno. Diagnóstico é clínico (primeiro episódio de sibilância com infecção respiratória viral). Não solicitar Rx de rotina. Tratamento: suporte (O₂, hidratação, decúbito elevado). Broncodilatadores têm eficácia limitada."
@@ -198,11 +198,11 @@ const rawQuestions = [
   {
     question: "Por que não se deve solicitar radiografia de tórax de rotina na bronquiolite viral aguda?",
     options: [
-      "O Rx frequentemente mostra hiperinsuflação e atelectasias que podem ser confundidos com consolidação, levando a antibioticoterapia desnecessária",
-      "O Rx é normal em 100% dos casos de bronquiolite, sendo desnecessário",
+      "Rx mostra atelectasias confundidas com consolidação, levando a antibiótico desnecessário",
+      "O Rx é normal em 100% dos casos de bronquiolite e não altera o tratamento",
       "O Rx tem custo elevado e irradiação excessiva sem qualquer utilidade diagnóstica",
       "O Rx só deve ser pedido após o 7º dia de doença para evitar falso-negativo",
-      "Não há nenhuma contraindicação ao Rx; ele é opcional mas recomendado"
+      "Não há contraindicação ao Rx; ele é opcional e pode auxiliar no diagnóstico"
     ],
     correctIndex: 0,
     explanation: "Na bronquiolite, o Rx frequentemente mostra hiperinsuflação e atelectasias subsegmentares que podem ser erroneamente interpretadas como consolidação bacteriana → antibioticoterapia desnecessária. Solicitar Rx apenas se houver dúvida diagnóstica, suspeita de complicação ou não melhora após 72h."
@@ -210,11 +210,11 @@ const rawQuestions = [
   {
     question: "Qual é o critério de positividade do PPD (teste tuberculínico) em uma criança de 3 anos sem fatores de risco para tuberculose?",
     options: [
-      "≥10 mm de enduração (em imunocompetentes sem contato com TB)",
-      "≥5 mm de enduração em qualquer criança",
-      "≥15 mm de enduração para ser considerado positivo",
-      "Qualquer enduração >0 mm em imunocompetentes",
-      "≥10 mm apenas se a criança não foi vacinada com BCG"
+      "≥10 mm de enduração em imunocompetentes sem contato com TB",
+      "≥5 mm de enduração em qualquer criança imunocompetente",
+      "≥15 mm de enduração para ser considerado positivo em qualquer caso",
+      "Qualquer enduração >0 mm em imunocompetentes já é considerado positivo",
+      "≥10 mm apenas se não vacinada com BCG nos últimos 2 anos"
     ],
     correctIndex: 0,
     explanation: "PPD positivo: ≥5 mm em imunossuprimidos, HIV, contatos recentes de TB ou Rx suspeito; ≥10 mm em imunocompetentes sem contato (crianças normais); ≥15 mm em vacinados com BCG há <2 anos (para diferenciar de reação vacinal). Vacinação com BCG pode causar falso-positivo de 5–9 mm."
@@ -222,8 +222,8 @@ const rawQuestions = [
   {
     question: "Qual o critério diagnóstico de TB pediátrica quando a baciloscopia e cultura são negativas?",
     options: [
-      "Sistema de pontuação do MS brasileiro (escore de Stegen modificado): história de contato + quadro clínico + PPD + Rx de tórax + estado nutricional",
-      "Apenas o PPD positivo é suficiente para iniciar tratamento",
+      "Escore de Stegen modificado: contato + clínica + PPD + Rx + estado nutricional",
+      "Apenas o PPD positivo, mesmo sem clínica, é suficiente para iniciar tratamento",
       "Diagnóstico exclusivo por cultura do lavado gástrico ou broncoscopia",
       "PCR para Mycobacterium tuberculosis negativa exclui o diagnóstico",
       "Apenas por biópsia de linfonodo com granuloma caseoso confirmado"
@@ -234,11 +234,11 @@ const rawQuestions = [
   {
     question: "Qual a profilaxia indicada para uma criança <5 anos assintomática que teve contato com adulto bacilífero?",
     options: [
-      "Isoniazida (INH) por 6 meses (quimioprofilaxia primária), independentemente do PPD",
-      "Rifampicina por 4 meses se PPD positivo",
-      "BCG se não vacinada, sem necessidade de isoniazida",
+      "Isoniazida por 6 meses independentemente do resultado do PPD",
+      "Rifampicina por 4 meses apenas se PPD positivo e sem doença ativa",
+      "BCG se não vacinada, sem necessidade de isoniazida profilática",
       "Apenas vigilância clínica e repetição do PPD em 8 semanas",
-      "Isoniazida por 9 meses somente se PPD ≥10 mm"
+      "Isoniazida por 9 meses somente se PPD ≥10 mm na reavaliação"
     ],
     correctIndex: 0,
     explanation: "Quimioprofilaxia primária para TB: contato com bacilífero + <5 anos OU imunocomprometido → isoniazida por 6 meses (independentemente do PPD, pois a imunidade é imatura em <5 anos). Reavaliação com PPD após 2–3 meses; se positivo: completar profilaxia e excluir doença ativa."
@@ -246,7 +246,7 @@ const rawQuestions = [
   {
     question: "Uma criança apresenta estridor inspiratório, dispneia, ansiedade, sialorreia intensa e posição de tripé. Qual a conduta INCORRETA neste cenário?",
     options: [
-      "Examinar a orofaringe com abaixador de língua para visualizar a epiglote e confirmar o diagnóstico",
+      "Examinar a orofaringe com espátula para visualizar a epiglote e confirmar o diagnóstico",
       "Manter a criança em posição confortável e não a agitar",
       "Preparar equipe para intubação/traqueostomia em centro cirúrgico",
       "Iniciar ceftriaxona EV após segurança da via aérea",
@@ -260,7 +260,7 @@ const rawQuestions = [
     options: [
       "Dexametasona oral 0,15–0,6 mg/kg dose única e observação domiciliar",
       "Internação para adrenalina nebulizada a cada 2 horas",
-      "Amoxicilina oral por 7 dias para cobrir infecção bacteriana secundária",
+      "Amoxicilina oral por 7 dias para cobrir infecção bacteriana secundária ao crupe",
       "Ceftriaxona intramuscular dose única e alta domiciliar",
       "Apenas umidificação do ar e watchful waiting sem medicação"
     ],
@@ -270,7 +270,7 @@ const rawQuestions = [
   {
     question: "Qual o número médio de episódios de resfriado comum que uma criança pode apresentar por ano?",
     options: [
-      "Até 11 episódios por ano (média 6–8), sendo mais frequentes em creches",
+      "Até 11 episódios por ano (média 6–8), mais frequentes em creches",
       "No máximo 3 episódios por ano em crianças saudáveis",
       "Até 5 episódios por ano, sempre com causa bacteriana",
       "Mais de 15 episódios por ano é considerado normal em lactentes",
@@ -282,8 +282,8 @@ const rawQuestions = [
   {
     question: "Qual das seguintes afirmações sobre bronquiolite viral é VERDADEIRA?",
     options: [
-      "O diagnóstico é clínico (primeiro episódio de sibilância com quadro viral em <24 meses) e não requer exames complementares rotineiros",
-      "A fisioterapia respiratória convencional é altamente recomendada como tratamento de primeira linha",
+      "Diagnóstico é clínico: primeiro episódio de sibilância com infecção viral em <24 meses",
+      "A fisioterapia respiratória convencional é recomendada como primeira linha de tratamento",
       "Salbutamol nebulizado deve ser prescrito em todos os casos para abrir as vias aéreas",
       "Corticosteroides sistêmicos são obrigatórios nos casos moderados a graves",
       "Antibiótico está sempre indicado para prevenir sobreinfecção bacteriana"
@@ -295,7 +295,7 @@ const rawQuestions = [
     question: "Qual o agente causador mais frequente da otite média aguda (OMA) bacteriana em crianças?",
     options: [
       "Streptococcus pneumoniae",
-      "Haemophilus influenzae não tipável",
+      "Haemophilus influenzae NTHi",
       "Moraxella catarrhalis",
       "Staphylococcus aureus",
       "Streptococcus pyogenes"
@@ -306,7 +306,7 @@ const rawQuestions = [
   {
     question: "Quais são as indicações de adenotonsilectomia na amigdalite de repetição?",
     options: [
-      "≥7 episódios/ano por 1 ano, OU ≥5 episódios/ano por 2 anos, OU ≥3 episódios/ano por 3 anos (critérios de Paradise)",
+      "≥7/ano por 1 ano, ≥5/ano por 2 anos ou ≥3/ano por 3 anos (critérios de Paradise)",
       "Qualquer criança com mais de 3 episódios de amigdalite no último ano",
       "Amigdalite em crianças maiores de 5 anos com escore de McIsaac ≥3",
       "Ausência de resposta ao antibiótico por 5 dias em qualquer episódio",
@@ -318,9 +318,9 @@ const rawQuestions = [
   {
     question: "Lactente de 5 meses com coriza há 3 dias, febre de 38,5°C e otalgia. Ao exame: membrana timpânica hiperemiada, abaulada, com perda do cone de luz. Qual a conduta?",
     options: [
-      "Amoxicilina 50 mg/kg/dia por 10 dias (OMA em <2 anos sempre trata com antibiótico)",
-      "Watchful waiting por 48–72h sem antibiótico, pois pode resolver espontaneamente",
-      "Azitromicina por 3 dias como alternativa ao amoxicilina",
+      "Amoxicilina 50 mg/kg/dia por 10 dias (OMA em <2 anos sempre trata)",
+      "Watchful waiting por 48–72h sem antibiótico, pode resolver espontaneamente",
+      "Azitromicina oral por 3 dias como alternativa à amoxicilina",
       "Ceftriaxona IM em dose única para garantir adesão ao tratamento",
       "Apenas analgesia com paracetamol e reavaliação em 72 horas"
     ],
